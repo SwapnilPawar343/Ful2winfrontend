@@ -8,11 +8,11 @@ const Navbar = () => {
   const location = useLocation();
   const { isAuthenticated, user } = useAuth();
 
-  useEffect(() => {
-    console.log('Navbar auth state:', { isAuthenticated, user });
-    console.log('Auth token:', localStorage.getItem('token'));
-    console.log('User data:', localStorage.getItem('user'));
-  }, [isAuthenticated, user]);
+//  useEffect(() => {
+ //   console.log('Navbar auth state:', { isAuthenticated, user });
+  //  console.log('Auth token:', localStorage.getItem('token'));
+ //   console.log('User data:', localStorage.getItem('user'));
+//  }, [isAuthenticated, user]);
   return (
     <>
       <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-b from-transparent to-[#022870] h-16 md:h-24">

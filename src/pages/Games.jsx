@@ -13,10 +13,11 @@ import mazeRunner from '../assets/maze-runner.png';
 import poker from '../assets/poker.png';
 import ludo from '../assets/ludo.png';
 import SportBall from '../assets/Sports-Ball.png';
+import { useNavigate } from 'react-router-dom';
 
 // Game data
 const games = [
-  { id: 1, title: 'Flappy-Boll', category: 'Puzzle', players: '10K+', image: SportBall, path: 'flappyball', featured: true },
+  { id: 1, title: 'Flappy-Boll', category: 'Puzzle', players: '10K+', image: SportBall,path:'/flappyball', featured: true },
   { id: 2, title: 'Rummy', category: 'Card', players: '25K+', image: rummy, featured: true },
   { id: 3, title: 'Maze Runner', category: 'Puzzle', players: '8K+', image: mazeRunner,  featured: true },
   { id: 4, title: 'Poker', category: 'Card', players: '15K+', image: poker, featured: false },
@@ -29,6 +30,12 @@ const Games = () => {
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const categories = ['all', 'Card', 'Puzzle', 'Board'];
+  const navigate = useNavigate();
+  const goToLobby = (tournament) => {
+      navigate(`/game-lobby`, { state: { tournament } });
+    
+  }
+
 
   const filteredGames = games.filter((game) => {
     const matchesCategory = activeCategory === 'all' || game.category === activeCategory;
@@ -95,8 +102,8 @@ const Games = () => {
               <div className="grid grid-cols-3 gap-4">
                 {filteredGames
                   .filter((game) => game.featured)
-                  .map((game) => (
-                    <GameCard key={game.id} game={game} />
+                  .map((game) => (<div onClick={() => goToLobby(game)}>
+                    <GameCard key={game.id} game={game} onClick={() => goToLobby(game)}/></div>
                   ))}
               </div>
             </div>
@@ -115,8 +122,8 @@ const Games = () => {
                 </div>
               </div>
               <div className="grid grid-cols-3 gap-4">
-                {filteredGames.map((game) => (
-                  <GameCard key={game.id} game={game} />
+                {filteredGames.map((game) => (<div onClick={() => goToLobby(game)}>
+                  <GameCard key={game.id} game={game}  /></div>
                 ))}
               </div>
             </div>

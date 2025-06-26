@@ -41,8 +41,8 @@ import GravityHop from './games/GravityHop';
 function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <ErrorBoundary>
+  
+        
           <Routes>
             {/* Public routes */}
             <Route path="/login" element={<Login />} />
@@ -50,7 +50,7 @@ function App() {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             
             {/* Protected routes */}
-            <Route element={<ProtectedRoute />}>
+           
               <Route path="/" element={<Home />} />
               <Route path="/profile" element={<ProfileScreen />} />
               <Route path="/profile/:id" element={<ProfileScreen />} />
@@ -82,13 +82,13 @@ function App() {
               <Route path="/matchmerge" element={<MatchMerge />} />
               <Route path="/eggcatcher" element={<EggCatcher />} />
               <Route path="/gravityhop" element={<GravityHop />} />
-            </Route>
+            
             
             {/* 404 - Not Found */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
-        </ErrorBoundary>
-      </AuthProvider>
+        
+    
     </BrowserRouter>
   );
 }

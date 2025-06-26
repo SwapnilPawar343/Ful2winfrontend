@@ -8,10 +8,16 @@ import logo from "../assets/logo.png";
 import snakeImg from "../assets/snake-and-ladder.png";
 import { useNavigate } from 'react-router-dom';
 import { AiOutlineArrowLeft } from "react-icons/ai";
+import { useLocation } from "react-router-dom";
 
 import "./GameLobby.css";
 
 export default function App() {
+  const location = useLocation();
+  // Get tournament data from state
+  const tournament = location.state?.tournament;
+console.log(tournament);
+  console.log("you are in game lobby");
   const [entry, setEntry] = useState("rupees");
   const [selectedRoomAction, setSelectedRoomAction] = useState("");
   const [selectedPlayWith, setSelectedPlayWith] = useState('friend');
@@ -47,11 +53,11 @@ export default function App() {
        
         <div className="game-header">
           <img
-            src={snakeImg}
+            src={tournament?.image} // Use tournament image or default
             alt="Snake and Ladders"
             className="game-icon"
           />
-          <h2 className="game-title">Snake and Ladders</h2>
+          <h2 className="game-title">{tournament.name}</h2>
           {/* Rating section */}
 <div className="game-rating">
   <span className="star">⭐</span>
@@ -67,7 +73,7 @@ export default function App() {
     {/* Classic Mode */}
    <div 
         className="game-mode-card"
-        onClick={() => navigate('/classicMode')} // Navigate to Classic Mode
+        onClick={() => navigate(tournament.path)} // Navigate to Classic Mode
         style={{ cursor: 'pointer' }} // Visual feedback
       >
         <div className="mode-content">

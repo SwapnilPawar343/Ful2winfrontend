@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
 import Header from '../components/Header';
 import Navbar from '../components/Navbar';
 import Button from '../components/Button';
@@ -6,10 +6,16 @@ import ludo from '../assets/ludo.png';
 import rummy from '../assets/rummy.png';
 import carrom from '../assets/carrom.png';
 import BackgroundBubbles from '../components/BackgroundBubbles';
+import { useNavigate } from 'react-router-dom';
+
 
 const Tournaments = () => {
   const [activeTab, setActiveTab] = useState('all');
   const [tournamentType, setTournamentType] = useState('coin');
+const navigate=useNavigate();
+const GoLobby=(tournament)=>{
+  navigate('/game-lobby',{ state: { tournament } });
+  }
 
   const statusTabs = [
     { id: 'all', label: 'All' },
@@ -29,7 +35,8 @@ const Tournaments = () => {
       timeLeft: '0m left',
       status: 'live',
       type: 'ludo',
-      mode: 'coin'
+      mode: 'coin',
+      path:'/flappyball'
     },
     {
       id: 2,
@@ -41,7 +48,8 @@ const Tournaments = () => {
       timeLeft: '0m left',
       status: 'live',
       type: 'rummy',
-      mode: 'cash'
+      mode: 'cash',
+      path:'game-lobby'
     },
     {
       id: 3,
@@ -53,7 +61,8 @@ const Tournaments = () => {
       timeLeft: '0m left',
       status: 'completed',
       type: 'carrom',
-      mode: 'coin'
+      mode: 'coin',
+      path:'game-lobby'
     },
     {
       id: 4,
@@ -65,7 +74,8 @@ const Tournaments = () => {
       timeLeft: '0m left',
       status: 'completed',
       type: 'ludo',
-      mode: 'cash'
+      mode: 'cash',
+      path:'game-lobby'
     },
     {
       id: 5,
@@ -77,7 +87,8 @@ const Tournaments = () => {
       timeLeft: '1h 20m left',
       status: 'upcoming',
       type: 'ludo',
-      mode: 'coin'
+      mode: 'coin',
+      path:'game-lobby'
     },
     {
       id: 6,
@@ -102,6 +113,7 @@ const Tournaments = () => {
       status: 'completed',
       type: 'ludo',
       mode: 'cash'
+    
     },
   ];
 
@@ -266,6 +278,7 @@ const Tournaments = () => {
                       </div>
                     </div>
                     <Button
+                    onClick={()=>GoLobby(tournament)}
                       variant="primary"
                       className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-2 rounded-lg mb-2"
                     >
