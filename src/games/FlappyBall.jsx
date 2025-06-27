@@ -2,32 +2,35 @@ import React, { useEffect, useRef } from "react";
 import axios from "axios";
 import ScoreCard from "./ScoreCard.jsx";
 const scoreData = {
-  userId: "12345", // Replace with actual user ID
-  score: 0, // This will be updated dynamically
-  roomId: "67890", // Replace with actual room ID
-  gameName: "Flappy Bird", // Replace with actual game name
+  userId: "1238", // Replace with actual user ID
+   // Replace with actual game name
 };
+import { useLocation } from "react-router-dom";
 
 const FlappyBall = () => {
   const [gameOn, setGameOn] = React.useState(false);
-
+  const location = useLocation();
+  // Get tournament data from state
+const { id, entryFee, type, game } = location.state || {};
+  console.log( game, "Game data in FlappyBall" );
   useEffect(() => {
     const handleMessage = (event) => {
       // ✅ Check origin to prevent security issues
       // if (event.origin !== "http://localhost:4000") return;
-
+     
       const { type, score } = event.data;
 
       if (type === "GAME_OVER") {
         console.log("🎯 Final Score from Game:", score);
-        // Send the score to the backend
-       // axios
-       //   .post("http://localhost:5000/score/submit-score", {
-        //    userId: "12345", // Replace with actual user ID
-        //    score: score,
-         //   roomId: "67890", // Replace with actual room ID
-          //  gameName: "Flappy Bird",
-         // });
+        console.log( game.title," Game Name: page parameter");
+        
+       axios
+         .post("http://localhost:5000/score/submit-score", {
+           userId: "1239", // Replace with actual user ID
+           score:  score,
+           roomId: id, // Replace with actual room ID
+           gameName: game.title // Replace with actual game name
+          });
           
         setGameOn(true);
         scoreData.score = score; // Update the score data
@@ -48,6 +51,8 @@ const FlappyBall = () => {
           score={scoreData.score}
           roomId={scoreData.roomId}
           gameName={scoreData.gameName}
+          game={game}
+
         />
       </div>
     ) : (

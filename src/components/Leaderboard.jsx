@@ -1,7 +1,10 @@
+import  { useEffect } from 'react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import BackgroundBubbles from '../components/BackgroundBubbles';
+import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 
 const leaderboardData = [
   { id: 1, name: 'Johari B.', balance: '₹42,320.33', prize: '₹1,100' },
@@ -20,7 +23,39 @@ const leaderboardData = [
 
 const Leaderboard = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const[scoreData, setScoreData] = React.useState("");
+  const { id, title } = location.state || {};
+  const data={
+    id: id,
+    title: title
+  }
 
+  useEffect(() => {
+    // Fetch leaderboard data from the server
+    const fetchLeaderboard = async () => {
+      try {
+        const response = await axios.post('http://localhost:5000/score/get-score',  {
+            roomId: data.id, // Pass the tournament ID
+            gameName: data.title // Pass the tournament title
+          
+        });
+        setScoreData(response.data.scores);
+        console.log("Score Data:", response.data.scores);
+        
+        // Assuming the response data is in the same format as leaderboardData
+        // setLeaderboardData(response.data);
+      } catch (error) {
+        console.error('Error fetching leaderboard data:', error);
+      }
+    };
+
+    fetchLeaderboard();
+
+
+  }, []);
+
+console.log(scoreData, "User ID in Leaderboard");
   return (
     <div className="relative h-screen bg-blueGradient text-white px-4 py-4 overflow-hidden">
       <BackgroundBubbles />
@@ -41,23 +76,24 @@ const Leaderboard = () => {
         <div className="text-xs text-white/70 font-semibold px-2 mb-2 flex justify-between">
           <div className="w-1/12">#</div>
           <div className="w-5/12">Player</div>
-          <div className="w-3/12 text-right">Balance</div>
+          <div className="w-3/12 text-right">Score</div>
           <div className="w-3/12 text-right">Prize Won</div>
         </div>
 
         {/* Scrollable List */}
         <div className="flex-1 overflow-y-auto space-y-2 pr-1 pb-4">
-          {leaderboardData.map((player, index) => (
+          {scoreData &&scoreData.map((scoreData, index) => (
             <div
-              key={player.id}
+              key={scoreData._id}
               className="bg-white/10 backdrop-blur-md border border-white/10 rounded-lg px-3 py-2 flex justify-between items-center hover:scale-[1.01] transition"
             >
               <div className="w-1/12 text-sm text-white/80 font-semibold">#{index + 1}</div>
               <div className="w-5/12">
-                <p className="text-sm text-white font-medium truncate">{player.name}</p>
+                <p className="text-sm text-white font-medium truncate">{scoreData.userId}</p>
+                
               </div>
-              <div className="w-3/12 text-right text-green-300 font-semibold text-sm">{player.balance}</div>
-              <div className="w-3/12 text-right text-lime-400 font-semibold text-sm">{player.prize}</div>
+              <div className="w-3/12 text-right text-green-300 font-semibold text-sm">{scoreData.score}</div>
+              <div className="w-3/12 text-right text-lime-400 font-semibold text-sm">{scoreData.gameName}</div>
             </div>
           ))}
 

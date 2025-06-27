@@ -13,27 +13,27 @@ import BackgroundCircles from '../components/BackgroundCircles';
 
 
 const Home = () => {
-  const { isAuthenticated } = useAuth();
+  //const { isAuthenticated } = useAuth();
   const [showSpinWheel, setShowSpinWheel] = useState(false);
   
   // Redirect to login if not authenticated
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
+ //// if (!isAuthenticated) {
+  //  return <Navigate to="/login" replace />;
+  //}
 
-  useEffect(() => {
+ // useEffect(() => {
     // Check session storage to show spin only once after login
-    const alreadyShown = sessionStorage.getItem('spinShownAfterLogin');
+ //   const alreadyShown = sessionStorage.getItem('spinShownAfterLogin');
 
-    if (!alreadyShown) {
-      const timer = setTimeout(() => {
-        setShowSpinWheel(true);
-        sessionStorage.setItem('spinShownAfterLogin', 'true'); // Mark as shown for this session
-      }, 1000);
+  //  if (!alreadyShown) {
+  //    const timer = setTimeout(() => {
+   //     setShowSpinWheel(true);
+    //    sessionStorage.setItem('spinShownAfterLogin', 'true'); // Mark as shown for this session
+    //  }, 1000);
 
-      return () => clearTimeout(timer);
-    }
-  }, []);
+   //   return () => clearTimeout(timer);
+  //  }
+ // }, []);
 
   const handleCloseSpin = () => {
     setShowSpinWheel(false);

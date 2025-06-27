@@ -16,7 +16,7 @@ export default function App() {
   const location = useLocation();
   // Get tournament data from state
   const tournament = location.state?.tournament;
-console.log(tournament);
+
   console.log("you are in game lobby");
   const [entry, setEntry] = useState("rupees");
   const [selectedRoomAction, setSelectedRoomAction] = useState("");
@@ -32,7 +32,7 @@ console.log(tournament);
        
  <button 
           className="back-button"
-          onClick={() => navigate("/")}  
+          onClick={() => navigate("/games")}  
           style={{
             position: 'absolute',
             top: '20px',
@@ -71,9 +71,9 @@ console.log(tournament);
 
   <div className="game-modes-container">
     {/* Classic Mode */}
-   <div 
+   <div
         className="game-mode-card"
-        onClick={() => navigate(tournament.path)} // Navigate to Classic Mode
+        onClick={() => navigate('/tournaments',{ state: { tournament } })} // Navigate to Classic Mode
         style={{ cursor: 'pointer' }} // Visual feedback
       >
         <div className="mode-content">
@@ -97,7 +97,8 @@ console.log(tournament);
 
     {/* Tournament Mode */}
     <div className={`game-mode-card ${selectedGameMode === 'tournament' ? 'selected' : ''}`}>
-      <div className="mode-content">
+      <div className="mode-content"
+       onClick={() => navigate('/tournaments',{ state: { tournament } })}>
         <div className="mode-info">
           <h3>Tournament Mode </h3>
           <p>Compete for big prizes</p>

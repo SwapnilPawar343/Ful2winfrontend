@@ -1,300 +1,147 @@
-import React, { use, useState } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FaArrowLeft, FaCoins, FaRupeeSign } from 'react-icons/fa';
+
 import Header from '../components/Header';
 import Navbar from '../components/Navbar';
-import Button from '../components/Button';
-import ludo from '../assets/ludo.png';
-import rummy from '../assets/rummy.png';
-import carrom from '../assets/carrom.png';
 import BackgroundBubbles from '../components/BackgroundBubbles';
-import { useNavigate } from 'react-router-dom';
-
+import { useLocation } from 'react-router-dom';
 
 const Tournaments = () => {
-  const [activeTab, setActiveTab] = useState('all');
-  const [tournamentType, setTournamentType] = useState('coin');
-const navigate=useNavigate();
-const GoLobby=(tournament)=>{
-  navigate('/game-lobby',{ state: { tournament } });
-  }
-
-  const statusTabs = [
-    { id: 'all', label: 'All' },
-    { id: 'live', label: 'Live' },
-    { id: 'upcoming', label: 'Upcoming' },
-    { id: 'completed', label: 'Completed' },
+  const navigate = useNavigate();
+  const location = useLocation();
+  const tournament = location.state?.tournament;
+  console.log(tournament)
+  const cashTournaments = [
+    { id: 1, entryFee: 10, prizePool: 100, players: 15, maxPlayers: 20, timeLeft: '1m 20s' },
+    { id: 2, entryFee: 25, prizePool: 300, players: 30, maxPlayers: 50, timeLeft: '2m 10s' },
   ];
 
-  const tournaments = [
-    {
-      id: 1,
-      name: 'Ludo Championship',
-      image: ludo,
-      entryFee: 100,
-      prizePool: 3000,
-      players: '45/50',
-      timeLeft: '0m left',
-      status: 'live',
-      type: 'ludo',
-      mode: 'coin',
-      path:'/flappyball'
-    },
-    {
-      id: 2,
-      name: 'Rummy Masters',
-      image: rummy,
-      entryFee: 200,
-      prizePool: 5000,
-      players: '32/60',
-      timeLeft: '0m left',
-      status: 'live',
-      type: 'rummy',
-      mode: 'cash',
-      path:'game-lobby'
-    },
-    {
-      id: 3,
-      name: 'Carrom Championship',
-      image: carrom,
-      entryFee: 150,
-      prizePool: 4000,
-      players: '40/40',
-      timeLeft: '0m left',
-      status: 'completed',
-      type: 'carrom',
-      mode: 'coin',
-      path:'game-lobby'
-    },
-    {
-      id: 4,
-      name: 'Ludo Championship',
-      image: ludo,
-      entryFee: 100,
-      prizePool: 3000,
-      players: '45/50',
-      timeLeft: '0m left',
-      status: 'completed',
-      type: 'ludo',
-      mode: 'cash',
-      path:'game-lobby'
-    },
-    {
-      id: 5,
-      name: 'Ludo Championship',
-      image: ludo,
-      entryFee: 100,
-      prizePool: 3000,
-      players: '45/50',
-      timeLeft: '1h 20m left',
-      status: 'upcoming',
-      type: 'ludo',
-      mode: 'coin',
-      path:'game-lobby'
-    },
-    {
-      id: 6,
-      name: 'Rummy Masters',
-      image: rummy,
-      entryFee: 100,
-      prizePool: 3000,
-      players: '45/50',
-      timeLeft: '1h 20m left',
-      status: 'upcoming',
-      type: 'rummy',
-      mode: 'cash'
-    },
-    {
-      id: 7,
-      name: 'Ludo Championship',
-      image: ludo,
-      entryFee: 100,
-      prizePool: 3000,
-      players: '45/50',
-      timeLeft: '0m left',
-      status: 'completed',
-      type: 'ludo',
-      mode: 'cash'
-    
-    },
+  const coinTournaments = [
+    { id: 3, entryFee: 100, prizePool: 3000, players: 45, maxPlayers: 50, timeLeft: '0m 30s' },
+    { id: 4, entryFee: 50, prizePool: 1500, players: 28, maxPlayers: 40, timeLeft: '1m 10s' },
   ];
 
-  const getFilteredTournaments = () => {
-    return tournaments.filter(tournament => {
-      const matchStatus = activeTab === 'all' || tournament.status === activeTab;
-      const matchType = tournament.mode === tournamentType;
-      return matchStatus && matchType;
-    });
-  };
+  const TournamentCard = ({id, entryFee, prizePool, players, maxPlayers, timeLeft, type }) => (
+    <div className="bg-white/10 border border-white/10 backdrop-blur-md rounded-xl px-4 py-4 shadow-md">
+      <div className="flex justify-between items-center mb-2 text-sm text-white/80">
+        <div className="flex flex-col">
+          <span className="text-xs text-white/50">Entry Fee</span>
+          <span className="flex items-center gap-1 font-medium text-yellow-300">
+            {type === 'cash' ? <FaRupeeSign className="text-xs" /> : <FaCoins className="text-xs" />}
+            {entryFee}
+          </span>
+        </div>
+        <div className="flex flex-col">
+          <span className="text-xs text-white/50">Prize</span>
+          <span className="flex items-center gap-1 font-medium text-green-300">
+            {type === 'cash' ? <FaRupeeSign className="text-xs" /> : <FaCoins className="text-xs" />}
+            {prizePool}
+          </span>
+        </div>
+        <div className="flex flex-col">
+          <span className="text-xs text-white/50">Players</span>
+          <span className="text-blue-300 font-medium">{players}/{maxPlayers}</span>
+        </div>
+      </div>
+
+      <div className="flex gap-2 mt-2">
+        <button
+          className={`w-1/2 py-1.5 rounded-full font-semibold text-sm transition 
+            ${type === 'cash' ? 'bg-green-400 hover:bg-green-500' : 'bg-yellow-400 hover:bg-yellow-500'} text-black`}
+          onClick={() => navigate(tournament.path, {
+            state: {
+               id,
+              entryFee,
+              type,
+              game: tournament, // passes full game data like image/title
+            },
+          })}
+        >
+          Join Tournament
+        </button>
+        <button
+          onClick={() => navigate('/leaderboard_singlegame', {
+            state: {
+              id,
+              title: tournament.title,
+            }
+          })}
+          className="w-1/2 py-1.5 rounded-full font-semibold text-sm bg-white/20 hover:bg-white/30 text-white border border-white/20"
+        >
+          Leaderboard
+        </button>
+      </div>
+
+      <p className="text-center text-xs text-white/60 mt-1">{timeLeft} left</p>
+    </div>
+  );
 
   return (
-    <div className="bg-blueGradient text-white min-h-screen pb-24">
+    <div className="relative min-h-screen bg-blueGradient text-white">
       <BackgroundBubbles />
-      <div className="bg-gradient-to-b from-blue-500/10 via-purple-500/5 to-transparent">
-        <Header />
-        <div className="container mx-auto px-4 py-8">
+      {/* <Header /> */}
 
-          {/* Tournament Type Tabs - Desktop */}
-          <div className="hidden md:flex gap-4 mb-6">
-            <Button
-              variant={tournamentType === 'coin' ? 'primary' : 'gradient'}
-              onClick={() => setTournamentType('coin')}
-              className="rounded-full"
-            >
-              Coin Tournaments
-            </Button>
-            <Button
-              variant={tournamentType === 'cash' ? 'primary' : 'gradient'}
-              onClick={() => setTournamentType('cash')}
-              className="rounded-full"
-            >
-              Cash Tournaments
-            </Button>
+      {/* Scrollable Content Below Header */}
+      <div className="relative z-10 max-w-md mx-auto h-[calc(100vh-64px)] px-4 pb-24 overflow-y-auto space-y-6">
+
+        {/* Back and Title */}
+        <div className="flex items-center mt-16 mb-2">
+          <button onClick={() => navigate(-1)} className="text-white text-lg mr-3">
+            <FaArrowLeft />
+          </button>
+          <div>
+            <h1 className="text-xl font-bold">Snake & Ladder</h1>
+            <p className="text-sm text-white/70">Tournament Lobby</p>
           </div>
+        </div>
 
-          {/* Tournament Type Tabs - Mobile */}
-          <div className="flex md:hidden gap-2 mb-6 mt-16">
-            <Button
-              variant={tournamentType === 'coin' ? 'primary' : 'gradient'}
-              onClick={() => setTournamentType('coin')}
-              className="rounded-full text-sm px-4 py-2 flex-1"
-            >
-              Coin Tournaments
-            </Button>
-            <Button
-              variant={tournamentType === 'cash' ? 'primary' : 'gradient'}
-              onClick={() => setTournamentType('cash')}
-              className="rounded-full text-sm px-4 py-2 flex-1"
-            >
-              Cash Tournaments
-            </Button>
+        {/* Game Image */}
+        <div className="w-full  rounded-xl overflow-hidden border border-white/10 shadow-md">
+          <img
+            src={tournament?.image }
+            alt="Snake and Ladder"
+            className="w-auto h-40 flex items-center justify-center object-cover "
+          />
+        </div>
+
+        {/* Wallet Balances */}
+        <div className="flex justify-between text-sm px-1">
+          <div className="flex items-center gap-1">
+            <FaRupeeSign className="text-yellow-300" />
+            <span className="text-white/90 font-medium">1246.00</span>
           </div>
+          <div className="flex items-center gap-1">
+            <FaCoins className="text-yellow-300" />
+            <span className="text-white/90 font-medium">2560 Coins</span>
+          </div>
+        </div>
 
-          {/* Status Tabs - Desktop */}
-          <div className="hidden md:flex gap-6 mb-8">
-            {statusTabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-2 text-sm font-medium transition-colors duration-200 ${
-                  activeTab === tab.id
-                    ? 'bg-active text-black rounded-full px-6'
-                    : 'text-dullBlue hover:text-white'
-                }`}
-              >
-                {tab.label}
-              </button>
+        {/* Cash Tournaments */}
+        <div>
+          <h2 className="text-white/90 text-base font-semibold mb-2">Cash Tournaments</h2>
+          <div className="space-y-4">
+            {cashTournaments.map((t) => (
+              <TournamentCard key={t.id} {...t} type="cash" />
             ))}
           </div>
+        </div>
 
-          {/* Status Tabs - Mobile */}
-          <div className="flex md:hidden gap-2 mb-6 overflow-x-auto">
-            {statusTabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-2 text-sm font-medium transition-colors duration-200 whitespace-nowrap ${
-                  activeTab === tab.id
-                    ? 'bg-yellow-400 text-black rounded-full'
-                    : 'text-gray-300 hover:text-white'
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Tournament Cards - Desktop */}
-          <div className="hidden md:grid md:grid-cols-2 gap-4">
-            {getFilteredTournaments().map((tournament) => (
-              <div key={tournament.id} className="bg-gradient-to-br from-gray-800/10 to-black/10 backdrop-blur-lg border border-white/30 rounded-xl p-6">
-                <div className="flex gap-6">
-                  <div className="w-2/5">
-                    <img src={tournament.image} alt={tournament.name} className="w-full aspect-square rounded-lg object-cover" />
-                  </div>
-                  <div className="w-3/5">
-                    <div className="flex justify-between items-start mb-4">
-                      <h3 className="text-xl font-semibold">{tournament.name}</h3>
-                      {tournament.status === 'live' && <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-md font-medium">LIVE</span>}
-                      {tournament.status === 'completed' && <span className="bg-gray-500 text-white text-xs px-2 py-1 rounded-md font-medium">COMPLETED</span>}
-                    </div>
-                    <div className="grid grid-cols-3 gap-4 mb-4 text-sm text-gray-300">
-                      <div>
-                        <p>Entry Fee</p>
-                        <p className="text-yellow-500 font-medium">{tournament.entryFee} Coins</p>
-                      </div>
-                      <div>
-                        <p>Prize Pool</p>
-                        <p className="text-yellow-500 font-medium">{tournament.prizePool} Coins</p>
-                      </div>
-                      <div>
-                        <p>Players</p>
-                        <p className="text-yellow-500 font-medium">{tournament.players}</p>
-                      </div>
-                    </div>
-                    <Button variant="primary" fullWidth className="mb-2">
-                      Join Tournament
-                    </Button>
-                    <p className="text-center text-sm text-gray-400">{tournament.timeLeft}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Tournament Cards - Mobile */}
-          <div className="md:hidden space-y-4">
-            {getFilteredTournaments().map((tournament) => (
-              <div key={tournament.id} className="bg-gradient-to-br from-blue-900/30 to-blue-800/20 backdrop-blur-lg border border-blue-400/30 rounded-xl p-4 relative overflow-hidden">
-                
-                {/* Compact status badges */}
-                {tournament.status === 'live' && (
-                  <div className="absolute top-2 right-2 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full shadow-md">
-                    LIVE
-                  </div>
-                )}
-                {tournament.status === 'completed' && (
-                  <div className="absolute top-2 right-2 bg-gray-500 text-white text-[10px] px-1.5 py-0.5 rounded-full shadow-md">
-                    DONE
-                  </div>
-                )}
-
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
-                    <img src={tournament.image} alt={tournament.name} className="w-full h-full object-cover" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-white font-semibold text-lg mb-1">{tournament.name}</h3>
-                    <div className="flex justify-between text-sm text-gray-300 mb-3">
-                      <div>
-                        <span className="text-gray-400">Entry Fee</span>
-                        <p className="text-yellow-400 font-medium">{tournament.entryFee} {tournament.mode}</p>
-                      </div>
-                      <div>
-                        <span className="text-gray-400">Prize Pool</span>
-                        <p className="text-yellow-400 font-medium">{tournament.prizePool} {tournament.mode}</p>
-                      </div>
-                      <div>
-                        <span className="text-gray-400">Players</span>
-                        <p className="text-yellow-400 font-medium">{tournament.players}</p>
-                      </div>
-                    </div>
-                    <Button
-                    onClick={()=>GoLobby(tournament)}
-                      variant="primary"
-                      className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-2 rounded-lg mb-2"
-                    >
-                      Join Tournament
-                    </Button>
-                    <p className="text-center text-xs text-gray-400">{tournament.timeLeft}</p>
-                  </div>
-                </div>
-              </div>
+        {/* Coin Tournaments */}
+        <div>
+          <h2 className="text-white/90 text-base font-semibold mt-4 mb-2">Coin Tournaments</h2>
+          <div className="space-y-4">
+            {coinTournaments.map((t) => (
+              <TournamentCard key={t.id} {...t} type="coin" />
             ))}
           </div>
         </div>
       </div>
-      <Navbar />
+
+      {/* <Navbar /> */}
     </div>
   );
 };
 
 export default Tournaments;
+// 

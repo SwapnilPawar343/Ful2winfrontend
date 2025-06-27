@@ -2,7 +2,8 @@ import React from 'react';
 import { ImCancelCircle } from "react-icons/im";
 import { Link, Navigate } from 'react-router-dom';
 
-const ScoreCard = ({ userId, score, roomId, gameName, onBackToLobby }) => {
+const ScoreCard = ({ game,userId, score, roomId, gameName, onBackToLobby }) => {
+  console.log(game,"Game data in ScoreCard");
   return (
     <div className="max-w-md mx-auto mt-12 p-6 bg-white rounded-2xl shadow-xl border border-gray-200">
       {/* Header */}

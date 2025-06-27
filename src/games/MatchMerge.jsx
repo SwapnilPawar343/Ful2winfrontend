@@ -28,7 +28,7 @@ const MatchMerge = () => {
             userId: "12345", // Replace with actual user ID
             score: score,
             roomId: "67890", // Replace with actual room ID
-            gameName: "match and Merge",
+            gameName: "color smash",
           });
           
         setGameOn(true);
