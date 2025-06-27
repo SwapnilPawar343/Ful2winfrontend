@@ -1,6 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft, FaCoins, FaRupeeSign } from 'react-icons/fa';
+import { useEffect } from 'react';
+import axios from 'axios';
 
 import Header from '../components/Header';
 import Navbar from '../components/Navbar';
@@ -11,7 +13,6 @@ const Tournaments = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const tournament = location.state?.tournament;
-  console.log(tournament)
   const cashTournaments = [
     { id: 1, entryFee: 10, prizePool: 100, players: 15, maxPlayers: 20, timeLeft: '1m 20s' },
     { id: 2, entryFee: 25, prizePool: 300, players: 30, maxPlayers: 50, timeLeft: '2m 10s' },
@@ -21,6 +22,28 @@ const Tournaments = () => {
     { id: 3, entryFee: 100, prizePool: 3000, players: 45, maxPlayers: 50, timeLeft: '0m 30s' },
     { id: 4, entryFee: 50, prizePool: 1500, players: 28, maxPlayers: 40, timeLeft: '1m 10s' },
   ];
+  const [playedTournaments, setPlayedTournaments] = React.useState([]);
+ const userId="12345";
+useEffect(() => {
+  const fetchPlayedTournaments = async () => {
+    try {
+      // or get from auth context 
+      const userId="12345"|| localStorage.getItem('userId');
+      const response = await axios.post('http://localhost:5000/score/isplay', {userId  });
+      setPlayedTournaments(response.data.played); // assuming it returns array of { roomId, gameName }
+    } catch (error) {
+      console.error("Error fetching played tournaments:", error);
+    }
+  };
+
+  fetchPlayedTournaments();
+}, []);
+const hasPlayed = (tournamentId) => {
+  return playedTournaments.some(
+    (t) => t.roomId === String(tournamentId) && t.gameName === tournament.title
+  );
+};
+
 
   const TournamentCard = ({id, entryFee, prizePool, players, maxPlayers, timeLeft, type }) => (
     <div className="bg-white/10 border border-white/10 backdrop-blur-md rounded-xl px-4 py-4 shadow-md">
@@ -58,7 +81,7 @@ const Tournaments = () => {
             },
           })}
         >
-          Join Tournament
+           {hasPlayed(id) ? "Play Again" : "Join Tournament"}
         </button>
         <button
           onClick={() => navigate('/leaderboard_singlegame', {
